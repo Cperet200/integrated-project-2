@@ -6,6 +6,7 @@ import com.ip2.myapp.backend.repository.AnswerRepository;
 import com.ip2.myapp.backend.repository.QuestionRepository;
 import com.ip2.myapp.backend.repository.SubjectRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.logging.Level;
@@ -32,12 +33,16 @@ public class AnswerService {
         return answerRepository.findAll();
     }
 
+    @Transactional
     public void save(Answer answer) {
         if (answer == null) {
             LOGGER.log(Level.SEVERE,
                     "Answer is null. Are you sure you have connected your form to the application?");
             return;
         }
+        answer.setQuestion(questionRepository.findById(answer.getQuestion().getId()).get());
         answerRepository.save(answer);
     }
+
+
 }

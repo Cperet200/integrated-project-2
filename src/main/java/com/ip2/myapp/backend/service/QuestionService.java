@@ -141,10 +141,6 @@ public class QuestionService {
 
     }
 
-    private List<Question> getQuestions(){
-        return questionRepository.findAll();
-    }
-
 
 }
 

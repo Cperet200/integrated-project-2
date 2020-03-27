@@ -22,6 +22,19 @@ public class Question extends AbstractEntity implements Cloneable {
         this.difficulty = difficulty;
     }
 
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    private Long id;
+
     @Enumerated(EnumType.STRING)
     @NotNull
     private Question.Difficulty difficulty;

@@ -20,7 +20,7 @@ public class Answer extends AbstractEntity {
     boolean rightAnswer;
 
     @NotNull
-    @ManyToOne(cascade = {CascadeType.ALL})
+    @ManyToOne(cascade = {CascadeType.ALL} )
     @JoinColumn(name = "question_id")
     Question question;
 
