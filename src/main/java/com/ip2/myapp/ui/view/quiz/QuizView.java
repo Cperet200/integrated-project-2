@@ -12,7 +12,6 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
@@ -30,9 +29,9 @@ public class QuizView extends VerticalLayout {
     private AnswerService answerService;
 
 
+    ComboBox<Answer> answers = new ComboBox<>("Answer");
+
     String answer;
-    TextArea textArea;
-    ComboBox<Answer> answers = new ComboBox<>("Answers");
     List<Question> questions;
 
 
@@ -42,21 +41,25 @@ public class QuizView extends VerticalLayout {
         this.answerService = answerService;
         questions = questionService.findAll();
 
-        textArea = new TextArea(questions.get(0).getQuestion());
-        textArea.setPlaceholder("Type in your answer here");
 
-        add(textArea, createAnswerPanel());
+
+        add(createAnswerPanel());
 
 
     }
 
     private Component createAnswerPanel() {
-        Button answer = new Button(questions.get(0).getQuestion());
+
+
+        answers.setPlaceholder(questions.get(0).getQuestion());
+
+        Button answer = new Button("Answer Question");
         answer.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         answer.addClickListener(click -> getAnswer(questions.get(0)));
+        answers.addValueChangeListener(e -> getAnswer(questions.get(0)));
         questions = questionService.findAll();
         answers.setItems(getAnswersFromQuestions(questions.get(0)));
-        return new HorizontalLayout(answer, answers);
+        return new HorizontalLayout(answers, answer);
     }
 
     private List<Answer> getAnswersFromQuestions(Question question) {
@@ -82,13 +85,11 @@ public class QuizView extends VerticalLayout {
     private void getAnswer(Question question) {
 
 
-        if (answers.getValue().getQuestion().getId() == question.getId()) {
+        if (answers.getValue().isRightAnswer() == true) {
             answer = "correct";
         } else {
             answer = "incorrect";
         }
-        System.out.println(answers.getValue().getQuestion().getId());
-        System.out.println(question.getId());
         System.out.println(answer);
     }
 
