@@ -2,11 +2,13 @@ package com.ip2.myapp.ui.view.quiz;
 
 import com.ip2.myapp.backend.entity.Answer;
 import com.ip2.myapp.backend.entity.Question;
+import com.ip2.myapp.backend.entity.Subject;
 import com.ip2.myapp.backend.service.AnswerService;
 import com.ip2.myapp.backend.service.QuestionService;
 import com.ip2.myapp.backend.service.SubjectService;
 import com.ip2.myapp.ui.MainLayout;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -29,6 +31,9 @@ public class QuizView extends VerticalLayout {
 
 
     ComboBox<Answer> answers = new ComboBox<>("Answer");
+    ComboBox<Subject> subjects = new ComboBox<>("Subject");
+    Button subjectPick = new Button("Select Subject");
+
 
     String answer;
     List<Question> questions;
@@ -42,23 +47,37 @@ public class QuizView extends VerticalLayout {
 
 
 
-        add(createAnswerPanel());
+        add(new VerticalLayout(selectSubject(), subjectPick));
 
 
     }
 
-    private Component createAnswerPanel() {
+    private Component selectSubject() {
+        subjects.setItems(subjectService.findAll());
 
 
-        answers.setPlaceholder(questions.get(0).getQuestion());
+        subjectPick.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
+        subjectPick.addClickListener(click -> add(createAnswerPanel(subjects.getValue())) );
+
+        return new VerticalLayout(subjects, subjectPick);
+
+    }
+
+    private Component createAnswerPanel(Subject subject) {
+
+        selectSubject().setVisible(false);
+        subjectPick.setVisible(false);
+        Text text = new Text(subject.getQuestions().get(0).getQuestion());
+        answers.setPlaceholder(subject.getQuestions().get(0).getQuestion());
+        answers.setItems(getAnswersFromQuestions(subject.getQuestions().get(0)));
         Button answer = new Button("Answer Question");
         answer.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        answer.addClickListener(click -> getAnswer(questions.get(0)));
-        answers.addValueChangeListener(e -> getAnswer(questions.get(0)));
+        answer.addClickListener(click -> getAnswer(subject.getQuestions().get(0)));
+        answers.addValueChangeListener(e -> getAnswer(subject.getQuestions().get(0)));
         questions = questionService.findAll();
-        answers.setItems(getAnswersFromQuestions(questions.get(0)));
-        return new VerticalLayout(answers, answer);
+
+        return new VerticalLayout(text, answers, answer);
     }
 
     private List<Answer> getAnswersFromQuestions(Question question) {
@@ -86,10 +105,12 @@ public class QuizView extends VerticalLayout {
 
         if (answers.getValue().isRightAnswer() == true) {
             answer = "correct";
+            System.out.println(answer);
         } else {
             answer = "incorrect";
+            System.out.println(answer);
         }
-        System.out.println(answer);
+
     }
 
 }

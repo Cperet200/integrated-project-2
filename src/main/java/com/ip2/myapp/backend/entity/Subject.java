@@ -42,4 +42,6 @@ public class Subject extends AbstractEntity implements Cloneable {
     public String toString() {
         return getName();
     }
+
+
 }
