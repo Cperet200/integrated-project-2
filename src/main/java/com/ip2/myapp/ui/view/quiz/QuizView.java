@@ -10,7 +10,6 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -59,7 +58,7 @@ public class QuizView extends VerticalLayout {
         answers.addValueChangeListener(e -> getAnswer(questions.get(0)));
         questions = questionService.findAll();
         answers.setItems(getAnswersFromQuestions(questions.get(0)));
-        return new HorizontalLayout(answers, answer);
+        return new VerticalLayout(answers, answer);
     }
 
     private List<Answer> getAnswersFromQuestions(Question question) {
