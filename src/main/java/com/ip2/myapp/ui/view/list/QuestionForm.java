@@ -22,7 +22,6 @@ public class QuestionForm extends FormLayout {
 
 
     TextField question = new TextField("Question");
-    TextField correctAnswer = new TextField("Answer");
     ComboBox<Question.Difficulty> difficulty = new ComboBox<>("Difficulty");
     ComboBox<Subject> subject = new ComboBox<>("Subject");
 
@@ -44,7 +43,6 @@ public class QuestionForm extends FormLayout {
 
         add(
                 question,
-                correctAnswer,
                 difficulty,
                 subject,
                 createButtonsLayout()
@@ -68,6 +66,7 @@ public class QuestionForm extends FormLayout {
         close.addClickShortcut(Key.ESCAPE);
 
         save.addClickListener(click -> validateAndSave());
+
         delete.addClickListener(click -> fireEvent(new DeleteEvent(this, binder.getBean())));
         close.addClickListener(click -> fireEvent(new CloseEvent(this)));
 
@@ -75,6 +74,7 @@ public class QuestionForm extends FormLayout {
 
         return new HorizontalLayout(save, delete, close);
     }
+
 
     private void validateAndSave() {
         if (binder.isValid()) {

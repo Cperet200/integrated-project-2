@@ -98,6 +98,7 @@ public class ListView extends VerticalLayout {
     private void addQuestion() {
         grid.asSingleSelect().clear();
         editQuestion(new Question());
+
     }
 
     private void addAnswer(){

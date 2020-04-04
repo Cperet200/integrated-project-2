@@ -77,6 +77,7 @@ public class QuestionService {
             Question question1 = new Question("What is 4 + 4",subjects.get(0), Question.Difficulty.Easy);
             Question question2 = new Question("What language was named after a coffee bean",  subjects.get(1), Question.Difficulty.Easy);
             Question question3 = new Question("What sql command do you use to change the data within a database",  subjects.get(2),Question.Difficulty.Medium);
+            Question question4 = new Question("What is 2 +2",  subjects.get(0),Question.Difficulty.Medium);
 
             Answer answer1 = new Answer("4", false, question1);
             Answer answer2 = new Answer("76", false, question1);
@@ -90,13 +91,19 @@ public class QuestionService {
             Answer answer10 = new Answer("Select", false, question3);
             Answer answer11 = new Answer("Alter", true, question3);
             Answer answer12 = new Answer("Drop", false, question3);
+            Answer answer13 = new Answer("4", false, question4);
+            Answer answer14 = new Answer("23", false, question4);
+            Answer answer15 = new Answer("22", true, question4);
+            Answer answer16 = new Answer("483297", false, question4);
 
 
             List<Answer> question1Answers = new LinkedList<>();
             List<Answer> question2Answers = new LinkedList<>();
             List<Answer> question3Answers = new LinkedList<>();
+            List<Answer> question4Answers = new LinkedList<>();
 
             List<Answer> answers = new LinkedList<>();
+
 
 
 
@@ -112,25 +119,33 @@ public class QuestionService {
             question3Answers.add(answer10);
             question3Answers.add(answer11);
             question3Answers.add(answer12);
+            question4Answers.add(answer13);
+            question4Answers.add(answer14);
+            question4Answers.add(answer15);
+            question4Answers.add(answer16);
 
             answers.addAll(question1Answers);
             answers.addAll(question2Answers);
             answers.addAll(question3Answers);
-
+            answers.addAll(question4Answers);
 
 
             question1.setCorrectAnswer(answer3.getAnswer());
             question2.setCorrectAnswer(answer5.getAnswer());
-            question3.setCorrectAnswer(answer1.getAnswer());
+            question3.setCorrectAnswer(answer9.getAnswer());
+            question4.setCorrectAnswer(answer13.getAnswer());
+
 
             question1.setAnswers(question1Answers);
             question2.setAnswers(question2Answers);
             question3.setAnswers(question3Answers);
+            question4.setAnswers(question4Answers);
 
             List<Question> questions  = new LinkedList<>();
             questions.add(question1);
             questions.add(question2);
             questions.add(question3);
+            questions.add(question4);
             answerRepository.saveAll(answers);
 
             questionRepository.saveAll(questions);

@@ -23,7 +23,7 @@ public class AnswerForm extends FormLayout {
 
     TextField answer = new TextField("Answer");
     ComboBox<Question> question = new ComboBox<>("Question");
-    ComboBox<Boolean> rightAnswer = new ComboBox<Boolean>("Set to false to set the answer as a false one");
+    ComboBox<Boolean> rightAnswer = new ComboBox<Boolean>("Set to false to set the answer as a false one or True for the correct answer");
     Button save = new Button("Save");
     Button close = new Button("Cancel");
 
@@ -33,9 +33,10 @@ public class AnswerForm extends FormLayout {
         addClassName("answer-form");
 
         binder.bindInstanceFields(this);
-        rightAnswer.setItems(false);
+        rightAnswer.setItems(true, false);
         question.setItems(questions);
         question.setItemLabelGenerator(Question::getQuestion);
+
         add(
                 answer,
                 rightAnswer,
@@ -66,8 +67,16 @@ public class AnswerForm extends FormLayout {
         return new HorizontalLayout(save, close);
     }
 
+
     private void validateAndSave() {
+
+
+
+            question.getValue().setCorrectAnswer("Test");
+
         if (binder.isValid()) {
+
+
             fireEvent(new SaveEvent(this, binder.getBean()));
             addClassName("editing");
 
