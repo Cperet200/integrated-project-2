@@ -1,5 +1,6 @@
 package com.ip2.myapp.ui.view.login;
 
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -24,10 +25,13 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
         setAlignItems(Alignment.CENTER);
 
         login.setAction("login");
+        Button registration = new Button("Register an account");
 
         add(
                 new H1("Integrated project 2 - Quiz"),
-                login
+                login,
+                registration
+
         );
     }
 
