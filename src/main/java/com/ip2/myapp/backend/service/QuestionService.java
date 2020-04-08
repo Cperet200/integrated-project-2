@@ -70,8 +70,9 @@ public class QuestionService {
     @PostConstruct
     public void populateTestData() {
 
-        User user = new User("test", "test", "user", "password");
-        User user2 = new User("admin", "admin","admin", "password");
+
+        User user = new User("admin", "admin","admin", "password");
+        User user2 = new User("test", "test", "user", "password");
         userRepository.save(user);
         userRepository.save(user2);
 

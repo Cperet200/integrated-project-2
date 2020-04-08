@@ -41,6 +41,7 @@ public class QuizView extends VerticalLayout {
     Button subjectPick = new Button("Select Subject");
     Button answer;
     Text finished = new Text("Quiz finished");
+    Text scoreRes;
     Text text = new Text("");
     Subject currentSubject;
 
@@ -93,7 +94,9 @@ public class QuizView extends VerticalLayout {
             score = ((score* 100) /subject.getQuestions().size());
             Result result = new Result(score, LoginView.curentUser, currentSubject);
             resultService.save(result);
-            return (finished);
+            String res = Double.toString(score);
+            scoreRes.setText("You scored " + res + "%");
+            return (scoreRes);
         }
 
     }

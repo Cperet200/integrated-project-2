@@ -4,6 +4,7 @@ import com.ip2.myapp.backend.entity.User;
 import com.ip2.myapp.backend.repository.UserRepository;
 import com.ip2.myapp.backend.service.UserService;
 import com.ip2.myapp.ui.view.list.ListView;
+import com.ip2.myapp.ui.view.list.UserView;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.JsModule;
@@ -119,8 +120,8 @@ public class LoginView extends VerticalLayout {
 
         for (int i = 0; i < userService.findAll().size(); i++) {
             if (userNameTextField.getValue().equals(userService.findAll().get(i).getUserName())) {
-                checkPassword(i);
                 setUserInfo(i);
+                checkPassword(i);
                 break;
             } else if ((i + 1) == userService.findAll().size()) {
                 printErrorMsg();
@@ -146,9 +147,16 @@ public class LoginView extends VerticalLayout {
 
     private void getHomePage() {
 
-        RouterLink listLink = new RouterLink("Successfully Logged in, go to application", ListView.class);
-        removeAll();
-        add(listLink);
+        if(curentUser.getUserName().equals("admin")){
+            RouterLink listLink = new RouterLink("Successfully Logged in, go to application", ListView.class);
+            removeAll();
+            add(listLink);
+        } else {
+            RouterLink listLink = new RouterLink("Successfully Logged in, go to application", UserView.class);
+            removeAll();
+            add(listLink);
+        }
+
     }
 
 
