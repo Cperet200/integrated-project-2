@@ -4,9 +4,11 @@ package com.ip2.myapp.backend.service;
 import com.ip2.myapp.backend.entity.Answer;
 import com.ip2.myapp.backend.entity.Question;
 import com.ip2.myapp.backend.entity.Subject;
+import com.ip2.myapp.backend.entity.User;
 import com.ip2.myapp.backend.repository.AnswerRepository;
 import com.ip2.myapp.backend.repository.QuestionRepository;
 import com.ip2.myapp.backend.repository.SubjectRepository;
+import com.ip2.myapp.backend.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -23,12 +25,14 @@ public class QuestionService {
     private QuestionRepository questionRepository;
     private SubjectRepository subjectRepository;
     private AnswerRepository answerRepository;
+    private UserRepository userRepository;
 
     public QuestionService(QuestionRepository questionRepository,
-                           SubjectRepository subjectRepository, AnswerRepository answerRepository) {
+                           SubjectRepository subjectRepository, AnswerRepository answerRepository, UserRepository userRepository) {
         this.questionRepository = questionRepository;
         this.subjectRepository = subjectRepository;
         this.answerRepository = answerRepository;
+        this.userRepository = userRepository;
     }
 
 
@@ -65,6 +69,13 @@ public class QuestionService {
 
     @PostConstruct
     public void populateTestData() {
+
+        User user = new User("test", "test", "user", "password");
+        User user2 = new User("admin", "admin","admin", "password");
+        userRepository.save(user);
+        userRepository.save(user2);
+
+
         if (subjectRepository.count() == 0) {
             subjectRepository.saveAll(
                     Stream.of("DataStructures", "Programming", "Databases")
@@ -128,13 +139,6 @@ public class QuestionService {
             answers.addAll(question2Answers);
             answers.addAll(question3Answers);
             answers.addAll(question4Answers);
-
-
-            question1.setCorrectAnswer(answer3.getAnswer());
-            question2.setCorrectAnswer(answer5.getAnswer());
-            question3.setCorrectAnswer(answer9.getAnswer());
-            question4.setCorrectAnswer(answer13.getAnswer());
-
 
             question1.setAnswers(question1Answers);
             question2.setAnswers(question2Answers);

@@ -1,15 +1,13 @@
 package com.ip2.myapp.backend.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
 
 @Entity
-public class User {
+public class User extends AbstractEntity implements Cloneable{
 
 
     public User() {}
@@ -31,6 +29,7 @@ public class User {
 
     @NotNull
     @NotEmpty
+    @Column(nullable = false, unique = true)
     String userName;
 
 
@@ -39,8 +38,8 @@ public class User {
     String  password;
 
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     List<Result> results;
 
 

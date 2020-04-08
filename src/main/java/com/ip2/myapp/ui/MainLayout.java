@@ -3,6 +3,7 @@ package com.ip2.myapp.ui;
 
 import com.ip2.myapp.ui.view.dashboard.DashboardView;
 import com.ip2.myapp.ui.view.list.ListView;
+import com.ip2.myapp.ui.view.list.Rankings;
 import com.ip2.myapp.ui.view.quiz.QuizView;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
@@ -30,7 +31,7 @@ public class MainLayout extends AppLayout {
         H1 logo = new H1("Integrated Project 2");
         logo.addClassName("logo");
 
-        Anchor logout = new Anchor("/logout", "Log out");
+        Anchor logout = new Anchor("/login", "Log out");
 
         HorizontalLayout header = new HorizontalLayout(new DrawerToggle(), logo, logout);
 
@@ -47,7 +48,8 @@ public class MainLayout extends AppLayout {
         listLink.setHighlightCondition(HighlightConditions.sameLocation());
         RouterLink dashboardLink = new RouterLink("Dashboard", DashboardView.class);
         RouterLink quizLink = new RouterLink("Quiz", QuizView.class);
-        addToDrawer(new VerticalLayout(listLink, dashboardLink, quizLink));
+        RouterLink resultLink = new RouterLink("Rankings", Rankings.class);
+        addToDrawer(new VerticalLayout(listLink, dashboardLink, quizLink, resultLink));
 
 
     }

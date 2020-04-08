@@ -1,5 +1,6 @@
 package com.ip2.myapp.backend.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
@@ -13,7 +14,7 @@ public class Subject extends AbstractEntity implements Cloneable {
 
     private String name;
 
-    @OneToMany(mappedBy = "subject", fetch = FetchType.EAGER)
+    @OneToMany(orphanRemoval = true, mappedBy = "subject", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Question> questions = new LinkedList<>();
 
 

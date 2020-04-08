@@ -26,17 +26,21 @@ public class ListView extends VerticalLayout {
 
     private final QuestionForm questionForm;
     private final AnswerForm answerForm;
+    private final SubjectForm subjectForm;
+    private final SubjectDeleteForm subjectDeleteForm;
     Grid<Question> grid = new Grid<>(Question.class);
     TextField filterText = new TextField();
 
 
     private QuestionService questionService;
     private AnswerService answerService;
+    private SubjectService subjectService;
 
 
     public ListView(QuestionService questionService, SubjectService subjectService, AnswerService answerService) {
         this.questionService = questionService;
         this.answerService = answerService;
+        this.subjectService = subjectService;
         addClassName("list-view");
         setSizeFull();
         configureGrid();
@@ -51,8 +55,17 @@ public class ListView extends VerticalLayout {
         answerForm.addListener(AnswerForm.SaveEvent.class, this::saveAnswer);
         answerForm.addListener(AnswerForm.CloseEvent.class, e -> closeEditor());
 
+        subjectForm = new SubjectForm(subjectService);
+        subjectForm.addListener(SubjectForm.SaveEvent.class, this::saveSubject);
 
-        Div content = new Div(grid, questionForm, answerForm);
+        subjectDeleteForm = new SubjectDeleteForm(subjectService.findAll(), subjectService, questionService);
+        subjectDeleteForm.addListener(SubjectDeleteForm.DeleteEvent.class, this::deleteSubject);
+        subjectDeleteForm.addListener(SubjectDeleteForm.CloseEvent.class, e -> closeEditor());
+
+
+
+
+        Div content = new Div(grid, questionForm, answerForm, subjectForm, subjectDeleteForm);
         content.addClassName("content");
         content.setSizeFull();
 
@@ -69,6 +82,12 @@ public class ListView extends VerticalLayout {
         closeEditor();
     }
 
+    private void deleteSubject(SubjectDeleteForm.DeleteEvent evt){
+        subjectService.delete(evt.getSubject());
+        updateList();
+        closeEditor();
+    }
+
     private void saveQuestion(QuestionForm.SaveEvent evt) {
         questionService.save(evt.getQuestion());
         updateList();
@@ -79,8 +98,15 @@ public class ListView extends VerticalLayout {
         answerService.save(ans.getAnswer());
         updateList();
         closeEditor();
-        ;
+
     }
+
+    private  void saveSubject(SubjectForm.SaveEvent evt){
+        subjectService.save(evt.getSubject());
+        updateList();
+        closeEditor();
+    }
+
     private HorizontalLayout getToolBar() {
         filterText.setPlaceholder("Filter by difficulty...");
         filterText.setClearButtonVisible(true);
@@ -89,8 +115,10 @@ public class ListView extends VerticalLayout {
 
         Button addQuestionButton = new Button("Add question", click -> addQuestion());
         Button addAnswerButton = new Button("Add answer to a question", click -> addAnswer());
+        Button addSubjectButton = new Button("Add Subject", click -> addSubject());
+        Button deleteSubjectButton = new Button("Delete Subject", click -> deleteSubject());
 
-        HorizontalLayout toolbar = new HorizontalLayout(filterText, addQuestionButton, addAnswerButton);
+        HorizontalLayout toolbar = new HorizontalLayout(filterText, addQuestionButton, addAnswerButton, addSubjectButton, deleteSubjectButton);
         toolbar.addClassName("toolbar");
         return toolbar;
     }
@@ -107,12 +135,25 @@ public class ListView extends VerticalLayout {
 
     }
 
+
+    private void addSubject(){
+        grid.asSingleSelect().clear();
+        editSubject(new Subject());
+    }
+
+    private void deleteSubject(){
+        grid.asSingleSelect().clear();
+        editDeleteSubject(new Subject());
+
+
+    }
+
     private void configureGrid() {
         grid.addClassName("question-grid");
         grid.setSizeFull();
         grid.removeColumnByKey("subject");
         grid.removeColumnByKey("answers");
-        grid.setColumns("question", "correctAnswer", "difficulty");
+        grid.setColumns("question", "difficulty");
         grid.addColumn(question -> {
             Subject subject = question.getSubject();
             return subject == null ? "-" : subject.getName();
@@ -143,11 +184,33 @@ public class ListView extends VerticalLayout {
         }
     }
 
+    private void editSubject(Subject subject) {
+        if (subject == null){
+            closeEditor();
+        } else {
+
+            subjectForm.setVisible(true);
+            addClassName("editing");
+        }
+    }
+
+    private void editDeleteSubject(Subject subject) {
+        if (subject == null){
+            closeEditor();
+        } else {
+
+            subjectDeleteForm.setVisible(true);
+            addClassName("editing");
+        }
+    }
+
     private void closeEditor() {
         questionForm.setQuestion(null);
         questionForm.setVisible(false);
         answerForm.setAnswer(null);
         answerForm.setVisible(false);
+        subjectForm.setVisible(false);
+        subjectDeleteForm.setVisible(false);
         removeClassName("editing");
     }
 

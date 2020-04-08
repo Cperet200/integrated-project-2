@@ -1,59 +1,49 @@
-package com.ip2.myapp.ui.view.list;
+package com.ip2.myapp.ui.view.login;
 
-import com.ip2.myapp.backend.entity.Answer;
-import com.ip2.myapp.backend.entity.Question;
+import com.ip2.myapp.backend.entity.User;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.shared.Registration;
 
-import java.util.List;
-
-public class AnswerForm extends FormLayout {
+public class RegisterForm extends FormLayout {
 
 
-    TextField answer = new TextField("Answer");
-    ComboBox<Question> question = new ComboBox<>("Question");
-    ComboBox<Boolean> rightAnswer = new ComboBox<Boolean>("Set to false to set the answer as a false one or True for the correct answer");
+
+    TextField firstName = new TextField("First Name");
+    TextField lastName = new TextField("Last Name");
+    TextField userName = new TextField("User name");
+    PasswordField password = new PasswordField("Password");
     Button save = new Button("Save");
     Button close = new Button("Cancel");
 
-    Binder<Answer> binder = new BeanValidationBinder<>(Answer.class);
+    Binder<User> binder = new BeanValidationBinder<>(User.class);
 
-    public AnswerForm(List<Question> questions) {
-        addClassName("answer-form");
+
+    public RegisterForm() {
+        addClassName("question-form");
 
         binder.bindInstanceFields(this);
-        rightAnswer.setItems(true, false);
-        question.setItems(questions);
-        question.setItemLabelGenerator(Question::getQuestion);
 
         add(
-                answer,
-                rightAnswer,
-                question,
-                createAnswersLayout()
+                firstName,
+                lastName,
+                userName,
+                password,
+                createRegisterLayout()
         );
-
-
     }
 
-
-    public void setAnswer(Answer answer) {
-        binder.setBean(answer);
-    }
-
-
-    private Component createAnswersLayout() {
+    private Component createRegisterLayout(){
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         close.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
 
@@ -67,7 +57,6 @@ public class AnswerForm extends FormLayout {
         return new HorizontalLayout(save, close);
     }
 
-
     private void validateAndSave() {
 
         if (binder.isValid()) {
@@ -79,27 +68,34 @@ public class AnswerForm extends FormLayout {
         }
     }
 
-    public static abstract class AnswerFormEvent extends ComponentEvent<AnswerForm> {
-        private Answer answer;
 
-        protected AnswerFormEvent(AnswerForm source, Answer answer) {
+
+
+    public static abstract class RegisterFormEvent extends ComponentEvent<RegisterForm> {
+        private User user;
+
+        protected RegisterFormEvent(RegisterForm source, User user) {
             super(source, false);
-            this.answer = answer;
+            this.user = user;
         }
 
-        public Answer getAnswer() {
-            return answer;
-        }
-    }
-
-    public static class SaveEvent extends AnswerFormEvent {
-        SaveEvent(AnswerForm source, Answer answer) {
-            super(source, answer);
+        public User getUser() {
+            return user;
         }
     }
 
-    public static class CloseEvent extends AnswerFormEvent {
-        CloseEvent(AnswerForm source) {
+    public void setUser(User user) {
+        binder.setBean(user);
+    }
+
+    public static class SaveEvent extends RegisterFormEvent {
+        SaveEvent(RegisterForm source, User user) {
+            super(source, user);
+        }
+    }
+
+    public static class CloseEvent extends RegisterFormEvent {
+        CloseEvent(RegisterForm source) {
             super(source, null);
         }
     }
@@ -107,6 +103,7 @@ public class AnswerForm extends FormLayout {
     public <T extends ComponentEvent<?>> Registration addListener(Class<T> eventType, ComponentEventListener<T> listener) {
         return getEventBus().addListener(eventType, listener);
     }
+
 
 
 }

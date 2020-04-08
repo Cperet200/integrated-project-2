@@ -43,9 +43,6 @@ public class Question extends AbstractEntity implements Cloneable {
     @NotEmpty
     private String question = "";
 
-
-    private String correctAnswer;
-
     @OneToMany(mappedBy = "question", fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     private List<Answer> answers = new LinkedList<>();
 
@@ -59,14 +56,6 @@ public class Question extends AbstractEntity implements Cloneable {
 
     public void setQuestion(String question) {
         this.question = question;
-    }
-
-    public String getCorrectAnswer() {
-        return correctAnswer;
-    }
-
-    public void setCorrectAnswer(String correctAnswer) {
-        this.correctAnswer = correctAnswer;
     }
 
     public Subject getSubject() {
