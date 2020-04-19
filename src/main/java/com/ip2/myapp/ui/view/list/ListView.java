@@ -55,7 +55,7 @@ public class ListView extends VerticalLayout {
         answerForm.addListener(AnswerForm.SaveEvent.class, this::saveAnswer);
         answerForm.addListener(AnswerForm.CloseEvent.class, e -> closeEditor());
 
-        subjectForm = new SubjectForm(subjectService);
+        subjectForm = new SubjectForm(subjectService, subjectService.findAll());
         subjectForm.addListener(SubjectForm.SaveEvent.class, this::saveSubject);
 
         subjectDeleteForm = new SubjectDeleteForm(subjectService.findAll(), subjectService, questionService);

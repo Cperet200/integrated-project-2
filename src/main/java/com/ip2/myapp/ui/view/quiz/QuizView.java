@@ -40,8 +40,7 @@ public class QuizView extends VerticalLayout {
     ComboBox<Subject> subjects = new ComboBox<>("Subject");
     Button subjectPick = new Button("Select Subject");
     Button answer;
-    Text finished = new Text("Quiz finished");
-    Text scoreRes;
+    Text scoreRes = new Text("");
     Text text = new Text("");
     Subject currentSubject;
 
@@ -94,8 +93,7 @@ public class QuizView extends VerticalLayout {
             score = ((score* 100) /subject.getQuestions().size());
             Result result = new Result(score, LoginView.curentUser, currentSubject);
             resultService.save(result);
-            String res = Double.toString(score);
-            scoreRes.setText("You scored " + res + "%");
+            scoreRes.setText(" Quiz is finished, You scored " + score + "%");
             return (scoreRes);
         }
 
