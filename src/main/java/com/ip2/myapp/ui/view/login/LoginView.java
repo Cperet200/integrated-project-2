@@ -39,7 +39,7 @@ public class LoginView extends VerticalLayout {
 
     public LoginView(UserService userService) {
         this.userService = userService;
-        registerForm = new RegisterForm();
+        registerForm = new RegisterForm(userService.findAll());
         registerForm.addListener(RegisterForm.SaveEvent.class, this::saveUser);
         registerForm.addListener(RegisterForm.CloseEvent.class, e -> closeEditor());
         registerForm.setVisible(false);

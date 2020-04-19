@@ -1,10 +1,7 @@
 package com.ip2.myapp.ui.view.login;
 
 import com.ip2.myapp.backend.entity.User;
-import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.ComponentEvent;
-import com.vaadin.flow.component.ComponentEventListener;
-import com.vaadin.flow.component.Key;
+import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -15,10 +12,14 @@ import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.shared.Registration;
 
+import java.util.List;
+
 public class RegisterForm extends FormLayout {
 
 
+    private Text text = new Text("Error, you have selected a User name that already exists, please select another name");
 
+    List<User> users;
     TextField firstName = new TextField("First Name");
     TextField lastName = new TextField("Last Name");
     TextField userName = new TextField("User name");
@@ -29,7 +30,9 @@ public class RegisterForm extends FormLayout {
     Binder<User> binder = new BeanValidationBinder<>(User.class);
 
 
-    public RegisterForm() {
+    public RegisterForm(List<User> users) {
+        this.users = users;
+
         addClassName("question-form");
 
         binder.bindInstanceFields(this);
@@ -50,14 +53,33 @@ public class RegisterForm extends FormLayout {
         save.addClickShortcut(Key.ENTER);
         close.addClickShortcut(Key.ESCAPE);
 
-        save.addClickListener(click -> validateAndSave());
+        save.addClickListener(click -> validate());
         close.addClickListener(click -> fireEvent(new CloseEvent(this)));
 
         binder.addStatusChangeListener(e -> save.setEnabled(binder.isValid()));
         return new HorizontalLayout(save, close);
     }
 
-    private void validateAndSave() {
+
+    private void validate(){
+
+        for(int i =0; i < users.size(); i++) {
+            if (userName.getValue().toUpperCase().equals(users.get(i).getUserName().toUpperCase())){
+                System.out.println(userName.getValue());
+                System.out.println(users.get(i).getUserName());
+                add(text);
+                break;
+            } else if((i + 1) == users.size()){
+                save();
+            }
+
+
+        }
+
+
+    }
+
+    private void save() {
 
         if (binder.isValid()) {
 
